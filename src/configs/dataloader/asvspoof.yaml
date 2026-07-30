@@ -1,0 +1,4 @@
+_target_: torch.utils.data.DataLoader
+batch_size: 64 # per the trim-pad training recipe in arXiv:2103.11326
+num_workers: 4
+pin_memory: True

@@ -1,0 +1,55 @@
+# Main training config for the LCNN voice anti-spoofing countermeasure
+# (ASVspoof2019 LA). Run with:
+#   python3 train.py -cn=lcnn data_dir=/path/to/ASVspoof2019_root
+defaults:
+  - model: lcnn
+  - writer: wandb
+  - metrics: asvspoof
+  - datasets: asvspoof
+  - dataloader: asvspoof
+  - transforms: asvspoof
+  - _self_
+
+# root directory under which the (possibly nested) ASVspoof2019 LA dataset
+# is auto-discovered (protocols + flac dirs), e.g. a Kaggle-attached input
+# dir. Override on the command line: data_dir=/kaggle/input/asvpoof-2019-dataset
+data_dir: ???
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 3e-4
+  betas: [0.9, 0.999]
+  eps: 1e-8
+
+lr_scheduler:
+  _target_: torch.optim.lr_scheduler.StepLR
+  gamma: 0.5
+  # LR is halved every 10 epochs (arXiv:2103.11326). The official
+  # ASVspoof2019 LA train partition has 25380 utterances; with
+  # batch_size=64 and drop_last=True that is 396 steps/epoch, so
+  # step_size = 10 * 396 = 3960. Adjust if your train index size differs
+  # (see the printed dataset sizes at the start of training).
+  step_size: 3960
+
+loss_function:
+  _target_: src.loss.CrossEntropyLoss
+
+trainer:
+  log_step: 50
+  n_epochs: 30
+  epoch_len: null # epoch-based training (one epoch = one full pass over train)
+  device_tensors: ["data_object", "labels"] # "key" is a list[str], not a tensor
+  resume_from: null # null, or checkpoint file name inside the run's save dir
+  device: auto
+  override: False
+  monitor: "min val_EER"
+  save_period: 5
+  early_stop: 10
+  save_dir: "saved"
+  seed: 1
+
+writer:
+  project_name: "asvspoof2019-lcnn"
+  run_name: "lcnn_fft_ce"
+  loss_names: ["loss"]
+  log_checkpoints: True

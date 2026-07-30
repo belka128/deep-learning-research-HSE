@@ -1,0 +1,21 @@
+# STFT front-end + trim-pad, following the FFT-LCNN front-end of the STC
+# paper (arXiv:1904.05576) and the trim-pad data prep scheme of
+# arXiv:2103.11326. random_crop=true (train) gives a fresh random K-frame
+# window each epoch (augmentation); random_crop=false (dev/eval) is
+# deterministic for reproducible scoring.
+train:
+  data_object:
+    _target_: src.transforms.STFTFrontend
+    sample_rate: 16000
+    n_fft: 1724
+    hop_seconds: 0.0081
+    n_frames: 750
+    random_crop: true
+inference:
+  data_object:
+    _target_: src.transforms.STFTFrontend
+    sample_rate: 16000
+    n_fft: 1724
+    hop_seconds: 0.0081
+    n_frames: 750
+    random_crop: false

@@ -1,0 +1,4 @@
+defaults:
+  - batch_transforms: none
+  - instance_transforms: asvspoof
+  - _self_

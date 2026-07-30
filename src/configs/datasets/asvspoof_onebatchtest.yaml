@@ -1,0 +1,17 @@
+# one-batch-test: overfit on a tiny fixed subset of the train partition,
+# evaluating on the very same subset. If the pipeline is correct, loss and
+# EER on "val" here should collapse to (near) 0 within a few hundred steps.
+train:
+  _target_: src.datasets.ASVspoofDataset
+  data_dir: ${data_dir}
+  part_name: "train"
+  limit: 64
+  shuffle_index: true # random 64-sample subset so both classes are present (~10% bonafide)
+  instance_transforms: ${transforms.instance_transforms.train}
+val:
+  _target_: src.datasets.ASVspoofDataset
+  data_dir: ${data_dir}
+  part_name: "train"
+  limit: 64
+  shuffle_index: true # random 64-sample subset so both classes are present (~10% bonafide)
+  instance_transforms: ${transforms.instance_transforms.inference}

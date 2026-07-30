@@ -1,0 +1,5 @@
+# EER cannot be averaged batch-by-batch (see src/trainer/trainer.py
+# docstring), so it is computed explicitly in the Trainer/Inferencer
+# instead of being listed here as a regular per-batch metric.
+train: []
+inference: []

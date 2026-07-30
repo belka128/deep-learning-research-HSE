@@ -1,0 +1,19 @@
+# One-batch overfit sanity check (see the homework's "one-batch test" tip):
+# trains and evaluates on the very same fixed 64-utterance subset for many
+# steps. Loss should go to ~0 and val_EER to ~0 within a few hundred steps
+# if the pipeline (data loading, front-end, model, loss) is correct.
+#   python3 train.py -cn=lcnn_onebatchtest data_dir=/path/to/ASVspoof2019_root
+defaults:
+  - lcnn
+  - override datasets: asvspoof_onebatchtest
+  - _self_
+
+lr_scheduler:
+  step_size: 100000 # effectively disable LR decay for this quick check
+
+trainer:
+  n_epochs: 300 # 300 steps total (1 batch/epoch since dataset size == batch_size)
+  log_step: 10
+  save_period: 300
+  early_stop: 300
+  override: True

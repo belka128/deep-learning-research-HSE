@@ -1,0 +1,7 @@
+# used for the final scoring / predictions.csv export on the LA eval
+# partition (inference.py), not during training
+test:
+  _target_: src.datasets.ASVspoofDataset
+  data_dir: ${data_dir}
+  part_name: "eval"
+  instance_transforms: ${transforms.instance_transforms.inference}

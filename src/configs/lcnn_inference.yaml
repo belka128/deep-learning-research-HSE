@@ -1,0 +1,21 @@
+# Runs the trained LCNN on the ASVspoof2019 LA eval partition, writes
+# data/saved/<save_path>/test_predictions.csv (key,score rows, no header
+# -- exactly the format expected by the course's grading.py) and prints
+# EER computed with the official compute_eer routine.
+#   python3 inference.py -cn=lcnn_inference data_dir=/path/to/ASVspoof2019_root
+defaults:
+  - model: lcnn
+  - metrics: asvspoof
+  - datasets: asvspoof_eval
+  - dataloader: asvspoof
+  - transforms: asvspoof
+  - _self_
+
+data_dir: ???
+
+inferencer:
+  device_tensors: ["data_object", "labels"]
+  device: auto
+  save_path: "eval"
+  seed: 1
+  from_pretrained: "saved/lcnn_fft_ce/model_best.pth"

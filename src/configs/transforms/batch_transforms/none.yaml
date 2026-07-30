@@ -1,0 +1,4 @@
+# no batch (on-device) transforms are used: the STFT front-end is applied
+# as an instance_transform instead (see instance_transforms/asvspoof.yaml)
+train: null
+inference: null

@@ -1,0 +1,5 @@
+_target_: src.model.LCNN
+n_freq: 863 # n_fft // 2 + 1, with n_fft=1724 (see transforms/instance_transforms/asvspoof.yaml)
+n_frames: 750 # trim-pad length K, per arXiv:2103.11326
+n_class: 2
+dropout: 0.75 # per the STC paper (arXiv:1904.05576), placed before the final BatchNorm
