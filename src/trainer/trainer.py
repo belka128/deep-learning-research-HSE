@@ -167,7 +167,15 @@ class Trainer(BaseTrainer):
             for batch_idx, batch in tqdm(
                 enumerate(dataloader), desc=part, total=len(dataloader)
             ):
-                batch = self.process_batch(batch, metrics=self.evaluation_metrics)
+                try:
+                    batch = self.process_batch(batch, metrics=self.evaluation_metrics)
+                except torch.cuda.OutOfMemoryError as e:
+                    if self.skip_oom:
+                        self.logger.warning("OOM on eval batch. Skipping batch.")
+                        torch.cuda.empty_cache()
+                        continue
+                    else:
+                        raise e
 
             eer = self._eer_from_buffers(self._eval_scores, self._eval_labels)
             if eer is not None:

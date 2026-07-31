@@ -26,10 +26,11 @@ lr_scheduler:
   gamma: 0.5
   # LR is halved every 10 epochs (arXiv:2103.11326). The official
   # ASVspoof2019 LA train partition has 25380 utterances; with
-  # batch_size=64 and drop_last=True that is 396 steps/epoch, so
-  # step_size = 10 * 396 = 3960. Adjust if your train index size differs
-  # (see the printed dataset sizes at the start of training).
-  step_size: 3960
+  # batch_size=16 and drop_last=True that is 1586 steps/epoch, so
+  # step_size = 10 * 1586 = 15860. Adjust if your train index size or
+  # dataloader.batch_size differs (see the printed dataset sizes at the
+  # start of training).
+  step_size: 15860
 
 loss_function:
   _target_: src.loss.CrossEntropyLoss
