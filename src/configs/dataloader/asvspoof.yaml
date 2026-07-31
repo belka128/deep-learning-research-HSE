@@ -6,3 +6,5 @@ _target_: torch.utils.data.DataLoader
 batch_size: 16
 num_workers: 4
 pin_memory: True
+persistent_workers: True # avoid respawning workers every epoch (costly with many short epochs)
+persistent_workers: True # avoid respawning workers every epoch (costly with many short epochs)
