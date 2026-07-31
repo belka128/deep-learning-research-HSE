@@ -1,10 +1,11 @@
+import hashlib
 import logging
 from pathlib import Path
 
 import torchaudio
 
 from src.datasets.base_dataset import BaseDataset
-from src.utils.io_utils import read_json, write_json
+from src.utils.io_utils import ROOT_PATH, read_json, write_json
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +98,13 @@ class ASVspoofDataset(BaseDataset):
         self.part_name = part_name
         self.sample_rate = sample_rate
 
-        index_cache_path = self.data_dir / f".cm_index_{part_name}.json"
+        # Cache under the (writable) project dir, not under data_dir: on
+        # Kaggle, data_dir is a read-only input mount. Key the cache file
+        # by a hash of data_dir so different dataset roots don't collide.
+        cache_dir = ROOT_PATH / "data" / "cm_index_cache"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        data_dir_hash = hashlib.md5(str(self.data_dir.resolve()).encode()).hexdigest()[:8]
+        index_cache_path = cache_dir / f"{part_name}_{data_dir_hash}.json"
 
         if index_cache_path.exists() and not rebuild_index:
             index = read_json(str(index_cache_path))
