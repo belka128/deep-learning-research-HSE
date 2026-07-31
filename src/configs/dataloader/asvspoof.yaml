@@ -1,10 +1,5 @@
 _target_: torch.utils.data.DataLoader
-# The training recipe (arXiv:2103.11326) reports batch_size 64 OR 8. We use
-# 16 as a compromise: 64 causes CUDA OOM on a ~14.5GB GPU at our full
-# 863x750 input resolution (the first conv layer's activation alone is
-# ~9.88GB at batch=64, i.e. ~2.47GB at batch=16). Lower to 8 if this still OOMs.
 batch_size: 16
 num_workers: 4
 pin_memory: True
-persistent_workers: True # avoid respawning workers every epoch (costly with many short epochs)
-persistent_workers: True # avoid respawning workers every epoch (costly with many short epochs)
+persistent_workers: True
